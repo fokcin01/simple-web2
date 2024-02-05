@@ -26,8 +26,9 @@ public class ResourceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String stringId = req.getParameter("id");
-        Integer id = stringId == null ? null : Integer.parseInt(stringId);
+        Integer id = stringId.isEmpty() ? null : Integer.parseInt(stringId);
         String name = req.getParameter("name");
         Integer price = Integer.valueOf(req.getParameter("price"));
         logger.info(String.valueOf(id));
@@ -35,6 +36,7 @@ public class ResourceServlet extends HttpServlet {
         logger.info(String.valueOf(price));
         Resource resource = new Resource(id,name,price);
         controller.save(resource);
+        resp.sendRedirect("resources");
     }
 
     @Override
@@ -51,15 +53,16 @@ public class ResourceServlet extends HttpServlet {
         }
         else if( action.equals("update") || action.equals("create")){
             Resource resource;
-            Integer id = Integer.valueOf(req.getParameter("id"));
+
             if(action.equals("create")){
                 resource = new Resource(null,"daIPohui",1);
             }else{
+                Integer id = Integer.valueOf(req.getParameter("id"));
                 resource = controller.getById(id);
             }
             req.setAttribute("resource",resource);
             req.getRequestDispatcher("/resourceForm.jsp").forward(req,resp);
-            logger.info("id: " + id);
+
         }
         else{
             req.setAttribute("resources", controller.getAll());

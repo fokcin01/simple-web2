@@ -34,6 +34,6 @@
     </c:forEach>
 
 </table>
-
+<a href="resources?action=create">Add Resource</a>
 </body>
 </html>

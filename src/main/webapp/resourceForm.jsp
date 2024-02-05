@@ -13,7 +13,7 @@
 <body>
 <jsp:useBean id ="resource" type="org.example.model.Resource" scope="request"/>
 <form method="post" action="resources">
-    <input name="id" type="number" value="${resource.id}" disabled/>
+    <input name="id" value="${resource.id}" readonly/>
     <input name="name" type="text" value="${resource.name}"/>
     <input name="price" type="number" value="${resource.price}"/>
     <button type="submit">save</button>

@@ -1,6 +1,7 @@
-package org.example.repository;
+package org.example.repository.springJdbc;
 
 import org.example.model.Resource;
+import org.example.repository.ResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public class ResourceRepositoryImpl implements ResourceRepository{
+public class ResourceRepositoryImpl implements ResourceRepository {
     private static final BeanPropertyRowMapper ROW_MAPPER = BeanPropertyRowMapper.newInstance(Resource.class);
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;

@@ -10,11 +10,6 @@ public class Resource  {
     private Integer id;
     private String name;
     private int price;
-
-    public Integer getId() {
-        return id;
-    }
-
     @Override
     public String toString() {
         return "Resource{" +
@@ -33,7 +28,9 @@ public class Resource  {
     public Resource() {
 
     }
-
+    public Integer getId() {
+        return id;
+    }
     public int getPrice() {
         return price;
     }
