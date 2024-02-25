@@ -1,26 +1,25 @@
 package org.example.model;
 
-public class Resource  {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
+@Entity
+@Table
+public class Resource extends AbstractEntity {
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    private Integer id;
     private String name;
     private int price;
+
     @Override
     public String toString() {
         return "Resource{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 '}';
     }
 
     public Resource(Integer id, String name, int price) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.price = price;
     }
@@ -28,9 +27,7 @@ public class Resource  {
     public Resource() {
 
     }
-    public Integer getId() {
-        return id;
-    }
+
     public int getPrice() {
         return price;
     }

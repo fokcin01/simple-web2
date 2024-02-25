@@ -1,8 +1,11 @@
 package org.example.web.resource;
 
+import org.example.controller.ResourceController;
 import org.example.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -11,18 +14,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.module.Configuration;
 
 public class ResourceServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(ResourceServlet.class);
     private ConfigurableApplicationContext springContext;
+    @Autowired
     private ResourceController controller;
-
-    @Override
-    public void init() throws ServletException {
-        springContext = new ClassPathXmlApplicationContext("spring-app.xml");
-        controller = springContext.getBean(ResourceController.class);
-    }
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
