@@ -17,7 +17,6 @@ import java.io.IOException;
 
 public class ResourceServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(ResourceServlet.class);
-    private ConfigurableApplicationContext springContext;
     @Autowired
     private ResourceController controller;
     @Autowired

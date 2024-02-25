@@ -14,10 +14,9 @@ import java.util.List;
 @RequestMapping("/api")
 @RestController
 public class ResourceController {
-    @Autowired
-    private ResourceRepository resourceRepository;
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
+    @Autowired private ResourceRepository resourceRepository;
 
     @GetMapping("/resources/all")
     public List<Resource> getAll() {
