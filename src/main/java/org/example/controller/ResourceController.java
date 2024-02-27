@@ -19,25 +19,18 @@ import java.util.stream.Collectors;
 @RestController
 public class ResourceController {
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
-    @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
-    }
 
-    ModelMapper modelMapper= modelMapper();
     @Autowired
     private ResourceRepository resourceRepository;
-    public static ResourceTO convertToDTO(Resource resource){
-        ResourceTO resourceTo = new ModelMapper().map(resource,ResourceTO.class);
-        return resourceTo;
-    }
 
     @GetMapping("/resources/all")
     public List<ResourceTO> getAll() {
         logger.info(resourceRepository.findAll().toString());
         List<Resource> all = resourceRepository.findAll();
         logger.info(all.toString());
-        return all.stream().map(resource -> convertToDTO(resource)).collect(Collectors.toList());
+        return all.stream()
+                .map(ResourceTO::toDto)
+                .collect(Collectors.toList());
     }
 
     public Resource getById(int id) {
