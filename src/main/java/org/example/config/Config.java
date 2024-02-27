@@ -1,5 +1,6 @@
 package org.example.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -25,4 +26,5 @@ public class Config {
         dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
     }
+
 }
