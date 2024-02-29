@@ -29,7 +29,7 @@ public class ResourceController {
         List<Resource> all = resourceRepository.findAll();
         logger.info(all.toString());
         return all.stream()
-                .map(ResourceTO::toDto)
+                .map(Resource::toDto)
                 .collect(Collectors.toList());
     }
 

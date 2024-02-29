@@ -1,7 +1,9 @@
 package org.example.model;
 
+import client.to.ResourceTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.modelmapper.ModelMapper;
 
 @Entity
 @Table
@@ -42,5 +44,15 @@ public class Resource extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static Resource toEntity(ResourceTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(dto, Resource.class);
+    }
+
+    public static ResourceTO toDto(Resource entity) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(entity, ResourceTO.class);
     }
 }
