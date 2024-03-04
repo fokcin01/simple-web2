@@ -1,13 +1,13 @@
 package org.example.model;
 
-import client.to.ResourceTO;
 import client.to.UserTO;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import org.modelmapper.ModelMapper;
 
 
 @Entity
-@Table
+@Table(name = "users")
 public class User extends AbstractEntity {
     private String username;
     public User(Integer id, String username) {
