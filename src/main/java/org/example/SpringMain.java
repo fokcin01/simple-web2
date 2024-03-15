@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
-@SpringBootApplication(scanBasePackages = {"org.example.controller"})
+@SpringBootApplication(scanBasePackages = {"org.example.controller", "org.example.service"})
 //@EnableJpaRepositories("org.example.repository")
 public class SpringMain {
     @Autowired

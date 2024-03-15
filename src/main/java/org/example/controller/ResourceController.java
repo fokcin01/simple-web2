@@ -2,18 +2,17 @@ package org.example.controller;
 
 import client.to.ResourceTO;
 import org.example.model.Resource;
-import org.example.repository.ResourceRepository;
-import org.modelmapper.ModelMapper;
+import org.example.secutiry.SecurityUtil;
+import org.example.service.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api")
 @RestController
@@ -21,29 +20,25 @@ public class ResourceController {
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     @Autowired
-    private ResourceRepository resourceRepository;
+    private ResourceService service;
 
     @GetMapping("/resources/all")
     public List<ResourceTO> getAll() {
-        logger.info(resourceRepository.findAll().toString());
-        List<Resource> all = resourceRepository.findAll();
-        logger.info(all.toString());
-        return all.stream()
-                .map(Resource::toDto)
-                .collect(Collectors.toList());
+        logger.info(service.getAll(SecurityUtil.getAuthUserId()).toString());
+        logger.info("get all resources for user id {}", SecurityUtil.getAuthUserId());
+        return service.getAll(SecurityUtil.getAuthUserId());
     }
 
     public Resource getById(int id) {
-
-        return resourceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("GetByIdException"));
+        return service.getById(id);
     }
 
     public void delete(int id) {
-        resourceRepository.deleteById(id);
+        service.delete(id);
     }
 
     public void save(Resource resource) {
-        resourceRepository.save(resource);
+        service.save(resource);
     }
 
 
