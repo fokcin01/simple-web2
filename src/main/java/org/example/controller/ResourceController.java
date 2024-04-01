@@ -36,7 +36,7 @@ public class ResourceController {
     }
 
     @PostMapping(value = "/resources/delete")
-    public void delete(String resourceTO) {
+    public void delete(@RequestBody String resourceTO) {
         logger.info("body: " + resourceTO);
         JsonNode id;
         try {
