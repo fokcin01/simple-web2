@@ -1,16 +1,18 @@
 package org.example.controller;
 
 import client.to.ResourceTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.Resource;
 import org.example.secutiry.SecurityUtil;
 import org.example.service.ResourceService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,11 +35,27 @@ public class ResourceController {
         return service.getById(id);
     }
 
-    public void delete(int id) {
-        service.delete(id);
+    @PostMapping(value = "/resources/delete")
+    public void delete(String resourceTO) {
+        logger.info("body: " + resourceTO);
+        JsonNode id;
+        try {
+            JsonNode node = new ObjectMapper().readTree(resourceTO);
+            if (node.has("id")) {
+                id = node.get("id");
+                service.delete(id.asInt(-1));
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void save(Resource resource) {
+    @PostMapping(value = "/resources/save")
+    public void save(String jsonResource) {
+        logger.info("json in save: " + jsonResource);
+        Resource resource = null;
+        //todo сделать с помощью ModelMapper или ObjectMapper из json Resource и пнуть дальше в сервис
+
         service.save(resource);
     }
 

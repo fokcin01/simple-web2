@@ -33,7 +33,7 @@ public class ResourceServlet extends HttpServlet {
         logger.info(name);
         logger.info(String.valueOf(price));
         Resource resource = new Resource(id,name,price);
-        controller.save(resource);
+//        controller.save(resource);
         resp.sendRedirect("resources");
     }
 
@@ -47,7 +47,7 @@ public class ResourceServlet extends HttpServlet {
         if (action.equals("delete")) {
             Integer id = Integer.valueOf(req.getParameter("id"));
             logger.info("id: " + id);
-            controller.delete(id);
+//            controller.delete(id);
         }
         else if( action.equals("update") || action.equals("create")){
             Resource resource;
