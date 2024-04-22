@@ -51,7 +51,7 @@ public class ResourceController {
     }
 
     @PostMapping(value = "/resources/save")
-    public void save(String jsonResource) {
+    public void save(@RequestBody String jsonResource) {
         logger.info("json in save: " + jsonResource);
         Resource resource = null;
         //todo сделать с помощью ModelMapper или ObjectMapper из json Resource и пнуть дальше в сервис
