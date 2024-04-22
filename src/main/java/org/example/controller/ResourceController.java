@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import org.example.model.Resource;
 import org.example.secutiry.SecurityUtil;
 import org.example.service.ResourceService;
@@ -23,6 +25,8 @@ public class ResourceController {
 
     @Autowired
     private ResourceService service;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @GetMapping("/resources/all")
     public List<ResourceTO> getAll() {
@@ -53,10 +57,21 @@ public class ResourceController {
     @PostMapping(value = "/resources/save")
     public void save(@RequestBody String jsonResource) {
         logger.info("json in save: " + jsonResource);
-        Resource resource = null;
-        //todo сделать с помощью ModelMapper или ObjectMapper из json Resource и пнуть дальше в сервис
 
-        service.save(resource);
+        //todo сделать с помощью ModelMapper или ObjectMapper из json Resource и пнуть дальше в сервис
+        JsonNode id;
+        try {
+            JsonNode node = new ObjectMapper().readTree(jsonResource);
+            if (node.has("id")) {
+                Resource resource = objectMapper.readValue(jsonResource, Resource.class);
+                service.save(resource);
+            }else{
+
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
