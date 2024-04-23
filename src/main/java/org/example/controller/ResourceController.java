@@ -59,19 +59,12 @@ public class ResourceController {
         logger.info("json in save: " + jsonResource);
 
         //todo сделать с помощью ModelMapper или ObjectMapper из json Resource и пнуть дальше в сервис
-        JsonNode id;
         try {
-            JsonNode node = new ObjectMapper().readTree(jsonResource);
-            if (node.has("id")) {
-                Resource resource = objectMapper.readValue(jsonResource, Resource.class);
-                service.save(resource);
-            }else{
-
-            }
+            Resource resource = objectMapper.readValue(jsonResource, Resource.class);
+            service.save(resource,SecurityUtil.getAuthUserId());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
     }
 
 

@@ -2,7 +2,9 @@ package org.example.service;
 
 import client.to.ResourceTO;
 import org.example.model.Resource;
+import org.example.model.User;
 import org.example.repository.ResourceRepository;
+import org.example.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class ResourceService {
 
     @Autowired
     private ResourceRepository resourceRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<ResourceTO> getAll(int userId) {
         List<Resource> all = resourceRepository.findAllByUserId(userId);
@@ -35,7 +39,9 @@ public class ResourceService {
         resourceRepository.deleteById(resourceId);
     }
 
-    public void save(Resource resource) {
+    public void save(Resource resource, int userId) {
+        User user = userRepository.getReferenceById(userId);
+        resource.setUser(user);
         resourceRepository.save(resource);
     }
 
