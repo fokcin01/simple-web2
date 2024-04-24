@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import client.to.Constants;
 import client.to.ResourceTO;
 import client.to.UserTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,19 +37,26 @@ public class UserController {
     }
 
     @PostMapping("/users/login")
-    public void login(@RequestBody String userJson) {
+    public String login(@RequestBody String userJson) {
         if (userJson == null || userJson.isEmpty()) {
             throw new IllegalArgumentException("can't login, user is null");
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             UserTO user = objectMapper.readValue(userJson, UserTO.class);
-            int id = user.getId();
-            SecurityUtil.setAuthUserId(id);
-            logger.info("set auth user id: {}", id);
+//            SecurityUtil.setAuthUserId(id);
+//            logger.info("set auth user id: {}", id);
+            User userByUsername = userRepository.findUserByUsername(user.getUsername());
+            if(userByUsername != null && userByUsername.getUserPassword().equals(user.getUserPassword())){
+                SecurityUtil.setAuthUserId(userByUsername.getId());
+                return Constants.LOGIN_OK;
+            }else{
+                return Constants.LOGIN_FAILED;
+            }
         } catch (JsonProcessingException e) {
             logger.error("error in login");
             e.printStackTrace();
+            return Constants.LOGIN_FAILED;
         }
     }
 

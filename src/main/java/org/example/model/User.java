@@ -10,9 +10,12 @@ import org.modelmapper.ModelMapper;
 @Table(name = "users")
 public class User extends AbstractEntity {
     private String username;
-    public User(Integer id, String username) {
+    private String userPassword;
+
+    public User(Integer id, String username,String userPassword) {
         super(id);
         this.username = username;
+        this.userPassword = userPassword;
     }
     public User() {
 
@@ -22,6 +25,7 @@ public class User extends AbstractEntity {
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
+                ", userPassword='" + userPassword + '\'' +
                 '}';
     }
 
@@ -32,6 +36,15 @@ public class User extends AbstractEntity {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
     public static User toEntity(UserTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(dto, User.class);
