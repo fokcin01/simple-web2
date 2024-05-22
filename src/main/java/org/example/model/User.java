@@ -1,6 +1,7 @@
 package org.example.model;
 
 import client.to.UserTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.modelmapper.ModelMapper;
@@ -11,11 +12,14 @@ import org.modelmapper.ModelMapper;
 public class User extends AbstractEntity {
     private String username;
     private String userPassword;
+    @Column(unique = true, nullable = false)
+    private String userEmail;
 
-    public User(Integer id, String username,String userPassword) {
+    public User(Integer id, String username,String userPassword,String userEmail) {
         super(id);
         this.username = username;
         this.userPassword = userPassword;
+        this.userEmail = userEmail;
     }
     public User() {
 
@@ -26,6 +30,7 @@ public class User extends AbstractEntity {
         return "User{" +
                 "username='" + username + '\'' +
                 ", userPassword='" + userPassword + '\'' +
+                ", userEmail='" + userEmail + '\'' +
                 '}';
     }
 
@@ -43,6 +48,14 @@ public class User extends AbstractEntity {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public static User toEntity(UserTO dto) {

@@ -11,6 +11,7 @@ import org.example.model.User;
 import org.example.repository.UserRepository;
 import org.example.secutiry.SecurityUtil;
 import org.example.service.ResourceService;
+import org.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/users/all")
     public List<UserTO> getAll() {
@@ -44,19 +47,39 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             UserTO user = objectMapper.readValue(userJson, UserTO.class);
-//            SecurityUtil.setAuthUserId(id);
-//            logger.info("set auth user id: {}", id);
             User userByUsername = userRepository.findUserByUsername(user.getUsername());
-            if(userByUsername != null && userByUsername.getUserPassword().equals(user.getUserPassword())){
+            if (userByUsername != null && userByUsername.getUserPassword().equals(user.getUserPassword())) {
                 SecurityUtil.setAuthUserId(userByUsername.getId());
                 return Constants.LOGIN_OK;
-            }else{
+            } else {
                 return Constants.LOGIN_FAILED;
             }
         } catch (JsonProcessingException e) {
             logger.error("error in login");
             e.printStackTrace();
             return Constants.LOGIN_FAILED;
+        }
+    }
+
+    @PostMapping("/users/registration")
+    public String registration(@RequestBody String userJson) {
+        if (userJson == null || userJson.isEmpty()) {
+            throw new IllegalArgumentException("can't registration, user is null");
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            UserTO user = objectMapper.readValue(userJson, UserTO.class);
+            User userByUserEmail = userRepository.findUserByUserEmail(user.getUserEmail());
+            if (userByUserEmail != null) {
+                return Constants.REGISTRATION_FAILED;
+            } else {
+                userService.save(User.toEntity(user));
+                return Constants.REGISTRATION_OK;
+            }
+        } catch (JsonProcessingException e) {
+            logger.error("error in registration");
+            e.printStackTrace();
+            return Constants.REGISTRATION_FAILED;
         }
     }
 
