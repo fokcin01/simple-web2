@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import client.to.Constants;
+import client.to.LoginAnswer;
 import client.to.ResourceTO;
 import client.to.UserTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @GetMapping("/users/all")
     public List<UserTO> getAll() {
@@ -44,20 +48,19 @@ public class UserController {
         if (userJson == null || userJson.isEmpty()) {
             throw new IllegalArgumentException("can't login, user is null");
         }
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             UserTO user = objectMapper.readValue(userJson, UserTO.class);
             User userByUsername = userRepository.findUserByUsername(user.getUsername());
             if (userByUsername != null && userByUsername.getUserPassword().equals(user.getUserPassword())) {
                 SecurityUtil.setAuthUserId(userByUsername.getId());
-                return Constants.LOGIN_OK;
+                return objectMapper.writeValueAsString(new LoginAnswer(Constants.LOGIN_OK, SecurityUtil.getAuthUserId()));
             } else {
-                return Constants.LOGIN_FAILED;
+                return objectMapper.writeValueAsString(new LoginAnswer(Constants.LOGIN_FAILED, null));
             }
-        } catch (JsonProcessingException e) {
-            logger.error("error in login");
-            e.printStackTrace();
-            return Constants.LOGIN_FAILED;
+        }
+        catch (JsonProcessingException e) {
+            logger.error("error in login", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -66,7 +69,6 @@ public class UserController {
         if (userJson == null || userJson.isEmpty()) {
             throw new IllegalArgumentException("can't registration, user is null");
         }
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             UserTO user = objectMapper.readValue(userJson, UserTO.class);
             User userByUserEmail = userRepository.findUserByUserEmail(user.getUserEmail());

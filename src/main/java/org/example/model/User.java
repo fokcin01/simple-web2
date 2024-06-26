@@ -25,15 +25,6 @@ public class User extends AbstractEntity {
 
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                '}';
-    }
-
     public String getUsername() {
         return username;
     }
@@ -66,5 +57,10 @@ public class User extends AbstractEntity {
     public static UserTO toDto(User entity) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(entity, UserTO.class);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
